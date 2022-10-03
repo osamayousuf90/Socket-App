@@ -1,0 +1,89 @@
+.chatApp {
+  height : 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+
+  .logout {
+    background-color: rgba(196, 17, 17, 0.74);
+    font-weight: bold;
+  }
+
+  .logout:hover {
+    background-color: rgb(131, 65, 65);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &_heading {
+    height: auto;
+    padding: 20px 0px;
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    align-items: center;
+
+    h1 {
+      font-weight: bold;
+    }
+  } 
+
+
+  &_messagesBox {
+    overflow-y: scroll !important;
+    height: 500px;
+    width: 60%;
+    border: 1px solid rgba(0, 0, 0, 0.315);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  &_contactInfo {
+    padding: 20px 50px;
+    height: 100px;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-evenly;
+    position: relative;
+
+
+    h2 {
+      font-size: 25px !important;
+      color: lightseagreen;
+    }
+
+    p {
+      margin-top: 10px;
+      font-size: 15px !important;
+    }
+
+    span {
+      color: rgba(128, 128, 128, 0.671);
+      font-size: 12px !important;
+    }
+  }
+
+
+  &_messageSend {
+    display: flex;
+    position: relative;
+    width: 60%;
+    position: relative;
+    top: 10px;
+    justify-content: space-around;
+
+    .inputField {
+      width: 90%;
+    }
+  }
+}
