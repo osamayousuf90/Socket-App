@@ -27,7 +27,7 @@ function App() {
     socket.on("received-message", ({name , room , message}) => {
       setChat([...chat, { name, message , room } ])	
     })
-  }, [socket])
+  }, [chat , socket])
 
   console.log("chat list --->", chat)
 
