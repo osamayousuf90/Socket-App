@@ -56,15 +56,15 @@ function App() {
 
 
 
-  useEffect(() =>
-  {
-      socket.emit('new-user', { name })
+  // useEffect(() =>
+  // {
+  //     socket.emit('new-user', { name })
 
-      socket.on("user-connected", ( data ) =>
-      {
-          setUser(name)
-      })
-  }, [name])
+  //     socket.on("user-connected", ( data ) =>
+  //     {
+  //         setUser(name)
+  //     })
+  // }, [name])
 
 
    
