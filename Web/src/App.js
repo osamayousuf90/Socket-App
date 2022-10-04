@@ -48,9 +48,7 @@ function App() {
   
   useEffect(() => {
     socket.on("received-message", ({ name, message }) => {
-    console.log("receiving ---->", { name, message });
-    setChat([...chat, { name, message }])	
-      
+    setChat([...chat, { name, message }])	 
     })
 
   }, [socket])
