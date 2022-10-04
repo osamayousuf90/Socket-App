@@ -19,15 +19,21 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
 
-  socket.on("join_room", (data) => {
-    socket.join(data)
+  socket.on("join_room", (room) => {
+    socket.join(room)
   })
 
   socket.on("send-message", (data) => {
     socket.to(data.room).emit("received-message", data)
   })
 
-   
+
+  socket.on('new-user', name =>
+  {
+      io.emit('user-connected', name)
+  })
+
+
 })
 
 

@@ -6,55 +6,102 @@ import io from "socket.io-client"
 import { useEffect , useState , useRef } from 'react';
 
 function App() {
-  const [ state, setState ] = useState({ message: "", name: "", room : "" })
+  const [state, setState] = useState({ message: "", room: "" })
+  const [name, setName] = useState("")
+  const [user, setUser] = useState("")
   const [chat, setChat] = useState([])
+  const [start, setStart] = useState(true);
   const socket = io.connect("http://localhost:3001")
- 
+  
+  // on text change saving values
   const onTextChange = (e) => {
 		setState({ ...state, [e.target.name]: e.target.value })
   }
 
-
+  // message send
   const sendMessage = () => {
-    const { message, name, room } = state;
+    const { message , room } = state;
     socket.emit("send-message", { message , name , room });
     socket.emit("join_room", room)
-    setState({...state, name , room , message : "" })
+    setState({...state , room , message : "" })
   }
 
+
+  // logout 
+  const logout = () => {
+  setStart(true);  
+  socket.on("disconnect")
+  }
+
+   
+  // user join
+  const join = () => {
+    const { room } = state;
+    setStart(false)
+    socket.emit("join_room", room)
+    socket.emit('new-user', { name })
+  }
+
+
+  // for getting values 
   
   useEffect(() => {
-    socket.on("received-message", ({name , room , message}) => {
-      setChat([...chat, { name, message , room } ])	
+    console.log(socket);
+    socket.on("received-message", ({ name , message}) => {
+      setChat([...chat, { name, message } ])	
     })
-  }, [chat , socket])
-
-  console.log("chat list --->", chat)
+  }, [socket])
 
 
+
+  useEffect(() =>
+  {
+      socket.emit('new-user', { name })
+
+      socket.on("user-connected", ( data ) =>
+      {
+          setUser(name)
+      })
+  }, [name])
+
+
+   
   return (
     <div className="chatApp"> 
       <div className="chatApp_heading">
         <h1>OzamApp</h1>
-        <Button size="medium" className='logout' variant="contained">Logout</Button>
+       { start === true ? "" : <Button size="medium" onClick={() => logout()} className='logout' variant="contained">Logout</Button> }  
       </div>
       <div className="chatApp_messagesBox">
-        {chat?.map((res) => {
+        {start === true ? <>
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }} className="mx-auto mt-5">
+          <h4 className='text-center'>Join The Chat</h4>
+          <TextField name="name" style={{margin: "40px 0px"}} value={name} onChange={(e) => setName(e.target.value)} size="small" className='inputField' label="Enter Your Name" variant="outlined" />
+          <TextField name="room" value={state.room} onChange={(e) => onTextChange(e)} size="small" className='inputField' label="Enter a Room" variant="outlined" />  
+          <Button size="medium" style={{margin: "40px 0px"}} onClick={() => join()} variant="contained">Join</Button>
+          </div> </> : <>
+            {/* <p style={{ margin: "5px 20px" }}>{name} Join The Chat</p>  */}
+            <p style={{ margin: "5px 20px" }}>{user} Connected</p>      
+            
+          {
+          chat?.map((res) => {
           return (
-      <div className="chatApp_contactInfo">
+        <div className="chatApp_contactInfo">
         <h2>{res?.name} :</h2>
         <p>{ res?.message}</p>
         <span>{moment().format('h:mm a')}</span>
-            </div>
+        </div>
           )
         })}
+        </>}
+    
      
       </div>
       <div className="chatApp_messageSend">
-      <TextField name="room" value={state.room} onChange={(e) => onTextChange(e)} size="small" className='inputField' label="Enter a Room" variant="outlined" />
-      <TextField name="name" value={state.name} onChange={(e) => onTextChange(e)} size="small" className='inputField' label="Enter Your Name" variant="outlined"/>
+        {start === true ? "" : <>
       <TextField name="message" value={state.message} onChange={(e) => onTextChange(e)} size="small" className='inputField' label="Send a Message" variant="outlined"/>
       <Button size="medium" onClick={() => sendMessage()} variant="contained">Send</Button>
+        </>}
       </div>
     </div>
   );
