@@ -12,6 +12,7 @@ function App() {
   const [chat, setChat] = useState([])
   const [start, setStart] = useState(true);
   const socket = io.connect("http://localhost:3001")
+  const [update , setUpdate] = useState(false)
   
   // on text change saving values
   const onTextChange = (e) => {
@@ -23,7 +24,7 @@ function App() {
     const { message , room } = state;
     socket.emit("send-message", { message , name , room });
     socket.emit("join_room", room)
-    setState({...state , room , message : "" })
+    setState({ ...state, room, message: "" })
   }
 
 
@@ -46,11 +47,14 @@ function App() {
   // for getting values 
   
   useEffect(() => {
-    console.log(socket);
-    socket.on("received-message", ({ name , message}) => {
-      setChat([...chat, { name, message } ])	
+    socket.on("received-message", ({ name, message }) => {
+    console.log("receiving ---->", { name, message });
+    setChat([...chat, { name, message }])	
+      
     })
+
   }, [socket])
+
 
 
 
