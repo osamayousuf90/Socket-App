@@ -19,7 +19,7 @@ function App() {
     const { message, name, room } = state;
     socket.emit("send-message", { message , name , room });
     socket.emit("join_room", room)
-    setState({ name , room , message : "" })
+    setState({...state, name , room , message : "" })
   }
 
   
@@ -54,7 +54,7 @@ function App() {
       <TextField name="room" value={state.room} onChange={(e) => onTextChange(e)} size="small" className='inputField' label="Enter a Room" variant="outlined" />
       <TextField name="name" value={state.name} onChange={(e) => onTextChange(e)} size="small" className='inputField' label="Enter Your Name" variant="outlined"/>
       <TextField name="message" value={state.message} onChange={(e) => onTextChange(e)} size="small" className='inputField' label="Send a Message" variant="outlined"/>
-      <Button size="medium" onClick={sendMessage} variant="contained">Send</Button>
+      <Button size="medium" onClick={() => sendMessage()} variant="contained">Send</Button>
       </div>
     </div>
   );
