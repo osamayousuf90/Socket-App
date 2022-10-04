@@ -31,7 +31,7 @@ function App() {
   // logout 
   const logout = () => {
   setStart(true);  
-  socket.on("disconnect")
+    socket.disconnect();
   }
 
    
